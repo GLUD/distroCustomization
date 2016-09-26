@@ -15,8 +15,8 @@ env | grep -i proxy
 }
 
 function proxyoff {
-unset {HTTP,HTTPS,FPT,ALL,SOCKS,NO}_PROXY
-unset {http,https,ftp,all,socks,no}_proxy
+unset {HTTP,HTTPS,FPT,ALL,SOCKS,RSYNC,NO}_PROXY
+unset {http,https,ftp,all,socks,rsync,no}_proxy
 
 env | grep -i proxy 
 }
