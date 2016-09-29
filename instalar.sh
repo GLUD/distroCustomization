@@ -1,5 +1,12 @@
 #!/bin/bash
 
+aplicacion=/usr/local/bin/glud.sh
+if [ -f $aplicacion ]
+then
+  echo 'El script ya está instalado.'
+else
+
+sudo tee $aplicacion << 'EOF'
 usuario=${USER^^}
 echo "  /\\_/\\  Hola $usuario"
 echo ' ( o.o ) Bienvenid@ al Grupo GNU/Linux UD '
@@ -20,3 +27,23 @@ unset {http,https,ftp,all,socks,rsync,no}_proxy
 
 env | grep -i proxy 
 }
+EOF
+
+fi
+
+archivos=(
+~/.bashrc
+"/root/.bashrc"
+)
+
+for i in "${archivos[@]}"
+do
+  if sudo grep -i "$aplicacion" $i &> /dev/null
+  then
+    echo "El archivo $i ya está modificado."
+  else
+    sudo cp $i{,.bak}
+    sudo tee -a $i <<< "source $aplicacion" 
+  fi
+done
+
