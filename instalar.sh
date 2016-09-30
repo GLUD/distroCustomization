@@ -47,3 +47,5 @@ do
   fi
 done
 
+# rationale: se carga el script en la terminal actual
+source $aplicacion
