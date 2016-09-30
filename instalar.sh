@@ -47,5 +47,7 @@ do
   fi
 done
 
-# rationale: se carga el script en la terminal actual
-source $aplicacion
+# rationale: Mostrar al usuario qué hay que hacer
+echo
+echo 'Ejecuta el comando:'
+echo "source $aplicacion"
