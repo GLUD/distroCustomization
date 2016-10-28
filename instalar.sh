@@ -3,7 +3,7 @@
 aplicacion=/usr/local/bin/glud.sh
 if [ -f $aplicacion ]
 then
-  echo 'El script ya está instalado.'
+  echo "El script ya está instalado en $aplicacion."
 else
 
 sudo tee $aplicacion << 'EOF'
@@ -25,12 +25,14 @@ function proxyoff {
 unset {HTTP,HTTPS,FTP,ALL,SOCKS,RSYNC,NO}_PROXY
 unset {http,https,ftp,all,socks,rsync,no}_proxy
 
-env | grep -i proxy 
+env | grep -i proxy
 }
 EOF
 
 fi
 
+# rationale: se adiciona una línea en los .bashrc que hace un source al glud.sh
+# para el futuro se planea hacerlo para /etc/profile.d ?
 archivos=(
 ~/.bashrc
 "/root/.bashrc"
@@ -43,19 +45,17 @@ do
     echo "El archivo $i ya está modificado."
   else
     sudo cp $i{,.bak}
-    sudo tee -a $i <<< "source $aplicacion" 
+    sudo tee -a $i <<< "source $aplicacion"
   fi
 done
 
-# rationale: Mostrar al usuario qué hay que hacer
-echo
-echo 'Ejecuta el comando:'
-echo "source $aplicacion"
-
+# rationale: chekcea a través de un comando como root, si el archivo existe
+# este por lo general tiene permisos 760, por tanto no se puede como usuario normal
+# comprobar si existe
 sudoersfile=/etc/sudoers.d/glud
-if [ -f $sudoersfile ]
+if sudo ls "$sudoersfile" &> /dev/null
 then
-  echo "Ya está $sudoersfile"
+  echo "Ya está creado archivo sudoers $sudoersfile."
 else
 
 sudo tee $sudoersfile << 'EOF'
@@ -77,3 +77,7 @@ EOF
 
 fi
 
+# rationale: Mostrar al usuario qué hay que hacer
+echo
+echo 'Ejecuta el comando:'
+echo "source $aplicacion"
