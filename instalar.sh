@@ -51,3 +51,29 @@ done
 echo
 echo 'Ejecuta el comando:'
 echo "source $aplicacion"
+
+sudoersfile=/etc/sudoers.d/glud
+if [ -f $sudoersfile ]
+then
+  echo "Ya está $sudoersfile"
+else
+
+sudo tee $sudoersfile << 'EOF'
+Defaults  env_keep += "http_proxy"
+Defaults  env_keep += "https_proxy"
+Defaults  env_keep += "ftp_proxy"
+Defaults  env_keep += "all_proxy"
+Defaults  env_keep += "socks_proxy"
+Defaults  env_keep += "rsync_proxy"
+Defaults  env_keep += "no_proxy"
+Defaults  env_keep += "HTTP_PROXY"
+Defaults  env_keep += "HTTPS_PROXY"
+Defaults  env_keep += "FPT_PROXY"
+Defaults  env_keep += "ALL_PROXY"
+Defaults  env_keep += "SOCKS_PROXY"
+Defaults  env_keep += "RSYNC_PROXY"
+Defaults  env_keep += "NO_PROXY"
+EOF
+
+fi
+
