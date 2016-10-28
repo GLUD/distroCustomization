@@ -16,4 +16,12 @@ Se puede desinstalar fácilmente ejecutando: ( recuerda poner el proxy :D )
 curl https://raw.githubusercontent.com/GLUD/distroCustomization/master/desinstalar.sh | bash
 ```
 
-
+# ¿Cómo lo uso?
+Escribe ***proxy*** en la terminal y ejecuta tus programas.
+```bash
+proxy
+```
+Cuando ya no lo necesites puedes escribir ***proxyoff***.
+```bash
+proxyoff
+```
