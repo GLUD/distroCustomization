@@ -10,3 +10,10 @@ https_proxy=http://10.20.4.15:3128 curl https://raw.githubusercontent.com/GLUD/d
 ```bash
 curl https://raw.githubusercontent.com/GLUD/distroCustomization/master/instalar.sh | bash
 ```
+
+Se puede desinstalar fácilmente ejecutando: ( recuerda poner el proxy :D )
+```bash
+curl https://raw.githubusercontent.com/GLUD/distroCustomization/master/desinstalar.sh | bash
+```
+
+
