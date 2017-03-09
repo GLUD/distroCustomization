@@ -45,7 +45,7 @@ do
     echo "El archivo $i ya está modificado."
   else
     sudo cp $i{,.bak}
-    sudo tee -a $i <<< "source $aplicacion"
+    echo -e "\nsource $aplicacion" | sudo tee -a $i
   fi
 done
 
