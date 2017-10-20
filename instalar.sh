@@ -18,6 +18,15 @@ if [ -z "$PROXY_DIR" ]; then
   PROXY_DIR=http://10.20.4.15:3128
 fi
 
+# rationale: agregar proxy a "apt-key adv"
+# link: https://unix.stackexchange.com/questions/361213/unable-to-add-gpg-key-with-apt-key-behind-a-proxy
+function proxy_apt_key {
+if [ "$1" != "off" ]; then
+  alias apt-key="apt-key --keyserver-options http-proxy=$PROXY_DIR"
+else
+  unalias apt-key
+fi
+}
 # rationale: agrega todas las variables de entorno conocidas
 # si desea agregar proxy a aplicaciones, puede generar nuevas funciones
 # que validen la existencia del programa y establezcan su proxy con alias
@@ -28,14 +37,14 @@ function proxy {
 export {HTTP,HTTPS,FTP,ALL,SOCKS,RSYNC}_PROXY=$PROXY_DIR
 export {http,https,ftp,all,socks,rsync}_proxy=$PROXY_DIR
 export {NO_PROXY,no_proxy}="localhost,127.0.0.1,localaddress,.localdomain.com,10.0.0.0/8,192.168.0.0/16,172.16.0.0/12"
-
+proxy_apt_key
 env | grep -i proxy
 }
 
 function proxyoff {
 unset {HTTP,HTTPS,FTP,ALL,SOCKS,RSYNC,NO}_PROXY
 unset {http,https,ftp,all,socks,rsync,no}_proxy
-
+proxy_apt_key off
 env | grep -i proxy
 }
 
