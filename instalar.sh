@@ -121,7 +121,7 @@ do
     echo "El archivo $i ya está modificado."
   else
     sudo cp $i{,.bak}
-    echo -e BASHRC_CONTENT | sudo tee -a $i
+    echo -e ${BASHRC_CONTENT} | sudo tee -a $i
   fi
 done
 
