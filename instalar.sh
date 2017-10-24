@@ -111,8 +111,10 @@ archivos=(
 )
 
 BASHRC_CONTENT=$(cat << EOF
+# begin distroCustomization
 source $aplicacion
 $HISTBASHRC_CONTENT
+# end distroCustomization
 EOF
 )
 
@@ -123,7 +125,7 @@ do
     echo "El archivo $i ya está modificado."
   else
     sudo cp $i{,.bak}
-    echo -e "${BASHRC_CONTENT}" | sudo tee -a $i
+    echo "${BASHRC_CONTENT}" | sudo tee -a $i
   fi
 done
 
