@@ -88,12 +88,31 @@ EOF
 
 fi
 
+# rationale: aumentar tamaño del historial
+# link: https://stackoverflow.com/questions/19454837/bash-histsize-vs-histfilesize#19454838
+# link: https://gist.github.com/OliverMichels/967993
+# link: https://bbs.archlinux.org/viewtopic.php?id=150992
+HISTBASHRCCONTENT=$(cat << 'EOF'
+export HISTCONTROL=ignoredups
+export HISTSIZE=500000
+export HISTFILESIZE=1000000
+export HISTIGNORE="&:ls:ll:la:l.:pwd:exit:clear"
+shopt -s histappend # Append to history rather than overwrite
+EOF
+)
+
 # rationale: se adiciona una línea en los .bashrc que hace un source al glud.sh
 # para el futuro se planea hacerlo para /etc/profile.d ?
+# la decisión fue NO, es mejor dejarlo en el directorio de usuario debido a qué
+# es más fácil realizar un backup de estos y no de todos los archivos del sistema
 archivos=(
 ~/.bashrc
 "/root/.bashrc"
 )
+
+BASHRC_CONTENT="\nsource $aplicacion\
+${HISTBASHRCCONTENT}
+"
 
 for i in "${archivos[@]}"
 do
@@ -102,7 +121,7 @@ do
     echo "El archivo $i ya está modificado."
   else
     sudo cp $i{,.bak}
-    echo -e "\nsource $aplicacion" | sudo tee -a $i
+    echo -e BASHRC_CONTENT | sudo tee -a $i
   fi
 done
 
