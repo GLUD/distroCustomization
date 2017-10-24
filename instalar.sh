@@ -92,7 +92,7 @@ fi
 # link: https://stackoverflow.com/questions/19454837/bash-histsize-vs-histfilesize#19454838
 # link: https://gist.github.com/OliverMichels/967993
 # link: https://bbs.archlinux.org/viewtopic.php?id=150992
-HISTBASHRCCONTENT=$(cat << 'EOF'
+HISTBASHRC_CONTENT=$(cat << 'EOF'
 export HISTCONTROL=ignoredups
 export HISTSIZE=500000
 export HISTFILESIZE=1000000
@@ -110,9 +110,11 @@ archivos=(
 "/root/.bashrc"
 )
 
-BASHRC_CONTENT="\nsource $aplicacion\
-${HISTBASHRCCONTENT}
-"
+BASHRC_CONTENT=$(cat << EOF
+source $aplicacion
+$HISTBASHRC_CONTENT
+EOF
+)
 
 for i in "${archivos[@]}"
 do
@@ -121,7 +123,7 @@ do
     echo "El archivo $i ya está modificado."
   else
     sudo cp $i{,.bak}
-    echo -e ${BASHRC_CONTENT} | sudo tee -a $i
+    echo -e "${BASHRC_CONTENT}" | sudo tee -a $i
   fi
 done
 
