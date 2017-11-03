@@ -3,15 +3,19 @@
 aplicacion=/usr/local/bin/glud.sh
 if [ -f $aplicacion ]
 then
-  echo "El script ya está instalado en $aplicacion."
+  echo "El script ya está instalado en $aplicacion. Nada qué hacer."
 else
 
+# rationale: Saludo GLUD
 sudo tee $aplicacion << 'EOF'
 usuario=${USER^^}
 echo "  /\\_/\\  Hola $usuario"
 echo ' ( o.o ) Bienvenid@ al Grupo GNU/Linux UD '
 echo '  > ^ < '
+EOF
 
+# rationale: Configuración del PROXY UDistrital
+sudo tee -a $aplicacion << 'EOF'
 # rationale: se una una única variable de entorno para establecer el proxy
 # si no existe se pone una predeterminada
 if [ -z "$PROXY_DIR" ]; then
@@ -24,9 +28,13 @@ function proxy_apt_key {
 if [ "$1" != "off" ]; then
   alias apt-key="apt-key --keyserver-options http-proxy=$PROXY_DIR"
 else
-  unalias apt-key
+  if alias | grep apt-key &> /dev/null
+  then 
+    unalias apt-key
+  fi
 fi
 }
+
 # rationale: agrega todas las variables de entorno conocidas
 # si desea agregar proxy a aplicaciones, puede generar nuevas funciones
 # que validen la existencia del programa y establezcan su proxy con alias
@@ -51,6 +59,11 @@ env | grep -i proxy
 function proxystat {
 env | grep -i proxy
 }
+
+EOF
+
+# rationale: agregar mostrar logo kokopelli glud
+sudo tee -a $aplicacion << 'EOF'
 function glud {
 echo '                                               -  '
 echo '                                            ..*@. '
@@ -86,21 +99,21 @@ echo '                       -os|||s.                   '
 
 EOF
 
-fi
-
+# rationale: escribe el archivo modificando variables de configuración del historial
+sudo tee -a $aplicacion << 'EOF'
 # rationale: aumentar tamaño del historial
 # link: https://stackoverflow.com/questions/19454837/bash-histsize-vs-histfilesize#19454838
 # link: https://gist.github.com/OliverMichels/967993
 # link: https://bbs.archlinux.org/viewtopic.php?id=150992
-HISTBASHRC_CONTENT=$(cat << 'EOF'
 export HISTCONTROL=ignoredups
 export HISTSIZE=500000
 export HISTFILESIZE=1000000
 export HISTIGNORE="&:ls:ll:la:l.:pwd:exit:clear"
 shopt -s histappend # Append to history rather than overwrite
-EOF
-)
 
+EOF
+
+fi
 # rationale: se adiciona una línea en los .bashrc que hace un source al glud.sh
 # para el futuro se planea hacerlo para /etc/profile.d ?
 # la decisión fue NO, es mejor dejarlo en el directorio de usuario debido a qué
@@ -111,16 +124,13 @@ archivos=(
 )
 
 BASHRC_CONTENT=$(cat << EOF
-# begin distroCustomization
 source $aplicacion
-$HISTBASHRC_CONTENT
-# end distroCustomization
 EOF
 )
 
 for i in "${archivos[@]}"
 do
-  if sudo grep -i "$aplicacion" $i &> /dev/null
+  if sudo grep -i "$BASHRC_CONTENT" $i &> /dev/null
   then
     echo "El archivo $i ya está modificado."
   else
