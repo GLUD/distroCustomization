@@ -12,6 +12,7 @@ usuario=${USER^^}
 echo "  /\\_/\\  Hola $usuario"
 echo ' ( o.o ) Bienvenid@ al Grupo GNU/Linux UD '
 echo '  > ^ < '
+
 EOF
 
 # rationale: Configuración del PROXY UDistrital
@@ -64,6 +65,8 @@ EOF
 
 # rationale: agregar mostrar logo kokopelli glud
 sudo tee -a $aplicacion << 'EOF'
+# rationale: logo del glud creado con caracteres ASCII
+# link: http://www.text-image.com/convert/pic2ascii.cgi
 function glud {
 echo '                                               -  '
 echo '                                            ..*@. '
@@ -113,7 +116,21 @@ shopt -s histappend # Append to history rather than overwrite
 
 EOF
 
+# rationale: algunos alias para gestor de paquetes apt
+sudo tee -a $aplicacion << 'EOF'
+# rationale: alias apt
+if apt --version &> /dev/null
+then
+alias aref='sudo apt update'
+alias aup='sudo apt upgrade'
+alias ain='sudo apt install'
+alias ase='apt search'
+
 fi
+EOF
+
+fi
+
 # rationale: se adiciona una línea en los .bashrc que hace un source al glud.sh
 # para el futuro se planea hacerlo para /etc/profile.d ?
 # la decisión fue NO, es mejor dejarlo en el directorio de usuario debido a qué
@@ -139,7 +156,7 @@ do
   fi
 done
 
-# rationale: chekcea a través de un comando como root, si el archivo existe
+# rationale: chekea a través de un comando como root, si el archivo existe
 # este por lo general tiene permisos 760, por tanto no se puede como usuario normal
 # comprobar si existe
 sudoersfile=/etc/sudoers.d/glud
@@ -148,6 +165,7 @@ then
   echo "Ya está creado archivo sudoers $sudoersfile."
 else
 
+# rationale: hace pass de las variables de entorno al sudo
 sudo tee $sudoersfile << 'EOF'
 Defaults  env_keep += "http_proxy"
 Defaults  env_keep += "https_proxy"
