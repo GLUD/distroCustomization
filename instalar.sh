@@ -125,6 +125,8 @@ alias aref='sudo apt update'
 alias aup='sudo apt upgrade'
 alias ain='sudo apt install'
 alias ase='apt search'
+alias arm='sudo apt remove'
+alias aarm='sudo apt autoremove'
 
 fi
 EOF
