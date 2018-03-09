@@ -16,6 +16,11 @@ Se puede desinstalar fácilmente ejecutando: ( recuerda poner el proxy :D )
 curl https://raw.githubusercontent.com/GLUD/distroCustomization/master/desinstalar.sh | bash
 ```
 
+**Nota:** Si usas Solus el directorio `/usr/local/bin` no existe por defecto, puedes crearlo usando el siguiente comando:
+```bash
+sudo mkdir -p /usr/local/bin
+```
+
 # ¿Cómo lo uso?
 Escribe ***proxy*** en la terminal y ejecuta tus programas.
 ```bash
