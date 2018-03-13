@@ -108,11 +108,11 @@ sudo tee -a $aplicacion << 'EOF'
 # link: https://stackoverflow.com/questions/19454837/bash-histsize-vs-histfilesize#19454838
 # link: https://gist.github.com/OliverMichels/967993
 # link: https://bbs.archlinux.org/viewtopic.php?id=150992
+shopt -s histappend # Append to history rather than overwrite
 export HISTCONTROL=ignoredups
 export HISTSIZE=500000
 export HISTFILESIZE=1000000
 export HISTIGNORE="&:ls:ll:la:l.:pwd:exit:clear"
-shopt -s histappend # Append to history rather than overwrite
 
 EOF
 
