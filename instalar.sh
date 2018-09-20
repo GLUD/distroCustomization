@@ -155,20 +155,19 @@ export HISTIGNORE="&:ls:ll:la:l.:pwd:exit:clear"
 EOF
 
   # rationale: algunos alias para gestor de paquetes apt
-  sudo tee -a $aplicacion << 'EOF'
+  if apt --version &> /dev/null
+  then
+    sudo tee -a $aplicacion << 'EOF'
 # rationale: alias para comando apt
-if apt --version &> /dev/null
-then
-  alias aref='sudo apt update'
-  alias aup='sudo apt upgrade'
-  alias ain='sudo apt install'
-  alias ase='apt search'
-  alias arm='sudo apt remove'
-  alias aarm='sudo apt autoremove'
-fi
+alias aref='sudo apt update'
+alias aup='sudo apt upgrade'
+alias ain='sudo apt install'
+alias ase='apt search'
+alias arm='sudo apt remove'
+alias aarm='sudo apt autoremove'
 
 EOF
-
+  fi
 fi
 
 # rationale: se adiciona una línea en los .bashrc que hace un source al glud.sh
